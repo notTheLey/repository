@@ -1,29 +1,31 @@
 package org.ley.menu;
 
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ley.menu.menu.Menu;
+import org.ley.menu.templates.simple.SimpleMenu;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class MenuBrowser implements Listener{
-    public static final String DEFAULT_NO_MENU = "no.menu";
+public final class MenuBrowser implements Listener {
+    public static final String DEFAULT_NO_MENU = "no.templates";
     public static final List<String> DEFAULT_NO_HISTORY = Collections.singletonList("no.history");
     public static final String EMPTY_STRING = "";
+    public static boolean ENHANCED_MENUS = false;
 
-    private static PluginManager pm = Bukkit.getPluginManager();
-    private static JavaPlugin plugin;
+    public static PluginManager pm;
+    public static JavaPlugin plugin;
 
-    public static Map<String, Menu> menuMap;
+    public static Map<String, SimpleMenu> menuMap;
     private static Map<UUID, String> playerMap;
     private static Map<UUID, List<String>> playerHistoryMap;
 
@@ -40,14 +42,36 @@ public final class MenuBrowser implements Listener{
     public MenuBrowser(JavaPlugin plugin) {
         MenuBrowser.plugin = Objects.requireNonNull(plugin, "Plugin cannot be null");
         initDefaults();
+        pm = Bukkit.getPluginManager();
+        pm.registerEvents(this, plugin);
     }
 
+    public MenuBrowser(JavaPlugin plugin, boolean ENHANCED_MENUS) {
+        MenuBrowser.plugin = Objects.requireNonNull(plugin, "Plugin cannot be null");
+        initDefaults();
+        pm = Bukkit.getPluginManager();
+        pm.registerEvents(this, plugin);
+        MenuBrowser.ENHANCED_MENUS = ENHANCED_MENUS;
+    }
+
+
     @EventHandler
-    public void onCloseInv(InventoryCloseEvent event){
+    public static void onCloseInv(InventoryCloseEvent event){
         if (hasEmptyInventory((Player) event.getPlayer())) {
             playerMap.remove(event.getPlayer().getUniqueId());
         }
     }
+
+    @EventHandler
+    public static void onPlayerQuit(PlayerQuitEvent event){
+        playerMap.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public static void onPlayerRespawn(PlayerRespawnEvent event){
+        playerMap.remove(event.getPlayer().getUniqueId());
+    }
+
 
     public static String getPlayerMenu(String name) {
         return getPlayerMenuOpt(name).orElse(DEFAULT_NO_MENU);
@@ -129,18 +153,18 @@ public final class MenuBrowser implements Listener{
         playerMap.put(uuid, url);
     }
 
-    public static synchronized void registerMenu(Menu menu) {
+    public static synchronized void registerMenu(SimpleMenu menu) {
         if (menu == null) return;
 
         String url = Optional.ofNullable(menu.getUrl()).orElse(DEFAULT_NO_MENU);
-        Menu oldMenu = menuMap.get(url);
+        SimpleMenu oldMenu = menuMap.get(url);
 
         pm.registerEvents(menu, plugin);
 
         if (oldMenu != null) {
             HandlerList.unregisterAll(oldMenu);
             Bukkit.getLogger().warning(String.format(
-                    "Overwriting existing menu '%s' with new menu '%s' for URL: %s",
+                    "Overwriting existing templates '%s' with new templates '%s' for URL: %s",
                     Optional.ofNullable(oldMenu.toString()).orElse("null"),
                     Optional.ofNullable(menu.toString()).orElse("null"),
                     url

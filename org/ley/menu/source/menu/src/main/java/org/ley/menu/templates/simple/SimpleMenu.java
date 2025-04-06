@@ -1,4 +1,4 @@
-package org.ley.menu.menu;
+package org.ley.menu.templates.simple;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -13,30 +13,32 @@ import org.ley.menu.MenuBrowser;
 import java.util.HashMap;
 
 @Data
-public abstract class Menu implements Listener {
+public abstract class SimpleMenu implements Listener {
 
     private final String url;
     private Inventory inventory;
     private String title;
     private HashMap<String, String> args = new HashMap<>();
 
-    public Menu(String url, int size) {
+    public SimpleMenu(String url, int size) {
         this.url = url;
         this.inventory = Bukkit.createInventory(null, size, url);
         MenuBrowser.registerMenu(this);
     }
 
-    public Menu(String url, InventoryType type) {
+    public SimpleMenu(String url, InventoryType type) {
         this.url = url;
         this.inventory = Bukkit.createInventory(null, type, url);
         MenuBrowser.registerMenu(this);
     }
 
     public void open(Player player, HashMap<String, String> args) {
+        this.inventory.clear();
         this.args = args;
-        player.openInventory(inventory);
+
+        Bukkit.getScheduler().runTaskLater(MenuBrowser.plugin, () -> onMenuOpenTrigger(player), 5);
+
         MenuBrowser.registerOpenMenu(player, MenuBrowser.buildURL(url, args));
-        onMenuOpenTrigger(player);
     }
 
     @EventHandler
@@ -53,8 +55,7 @@ public abstract class Menu implements Listener {
     public void onMenuOpenTrigger(Player player) {
         if (!MenuBrowser.getUrl(MenuBrowser.getPlayerMenu(player)).equalsIgnoreCase(url)) return;
 
-        args = (HashMap<String, String>) MenuBrowser.getArgs(MenuBrowser.getPlayerMenu(player));
-
+        args = MenuBrowser.getArgs(MenuBrowser.getPlayerMenu(player));
         player.openInventory(onMenuOpen(player, inventory, args));
     }
 

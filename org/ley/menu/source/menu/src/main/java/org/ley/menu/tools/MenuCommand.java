@@ -1,4 +1,4 @@
-package org.ley.menu.options;
+package org.ley.menu.tools;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -14,7 +14,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.ley.menu.MenuBrowser;
-import org.ley.menu.menu.Menu;
+import org.ley.menu.templates.simple.SimpleMenu;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,7 +56,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
     private boolean handleOpenCommand(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sendMessage(sender, ERROR, "Usage: /menu open <player> <url> [args...]");
+            sendMessage(sender, ERROR, "Usage: /templates open <player> <url> [args...]");
             return true;
         }
 
@@ -81,7 +81,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
         String fullUrl = MenuBrowser.buildURL(url, params);
         MenuBrowser.openForPlayer(target, fullUrl);
 
-        Component message = Component.text("Opened menu '", SUCCESS)
+        Component message = Component.text("Opened templates '", SUCCESS)
                 .append(createUrlComponent(fullUrl))
                 .append(Component.text("' for " + target.getName(), SUCCESS));
 
@@ -91,7 +91,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
     private boolean handleHistoryCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sendMessage(sender, ERROR, "Usage: /menu history <player>");
+            sendMessage(sender, ERROR, "Usage: /templates history <player>");
             return true;
         }
 
@@ -103,7 +103,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
         List<String> history = MenuBrowser.getPlayerMenuHistory(target);
         if (history.isEmpty()) {
-            sendMessage(sender, INFO, target.getName() + " has no menu history.");
+            sendMessage(sender, INFO, target.getName() + " has no templates history.");
             return true;
         }
 
@@ -151,7 +151,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
     private boolean handleGetCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sendMessage(sender, ERROR, "Usage: /menu get <player>");
+            sendMessage(sender, ERROR, "Usage: /templates get <player>");
             return true;
         }
 
@@ -163,7 +163,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
         String currentMenu = MenuBrowser.getPlayerMenu(target);
         if (currentMenu.equals(MenuBrowser.DEFAULT_NO_MENU)) {
-            sendMessage(sender, INFO, target.getName() + " doesn't have any menu open.");
+            sendMessage(sender, INFO, target.getName() + " doesn't have any templates open.");
             return true;
         }
 
@@ -171,7 +171,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
         Map<String, String> argsMap = MenuBrowser.getArgs(currentMenu);
 
         Component message = Component.text()
-                .append(Component.text("Current menu for " + target.getName() + ":", ACCENT))
+                .append(Component.text("Current templates for " + target.getName() + ":", ACCENT))
                 .append(Component.newline())
                 .append(Component.text("URL: ", DETAIL))
                 .append(createUrlComponent(baseUrl, argsMap))
@@ -183,20 +183,20 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean handleClearCommand(CommandSender sender) {
-        if (!sender.hasPermission("ley.admin.menu")) {
+        if (!sender.hasPermission("ley.admin.templates")) {
             sendMessage(sender, ERROR, "You don't have permission to do that!");
             return true;
         }
 
         MenuBrowser.unregisterAllMenus();
-        sendMessage(sender, SUCCESS, "All menus have been unregistered and can be re-registered.");
+        sendMessage(sender, SUCCESS, "All templates have been unregistered and can be re-registered.");
         return true;
     }
 
     private boolean handleListCommand(CommandSender sender) {
-        Map<String, Menu> menus = MenuBrowser.menuMap;
+        Map<String, SimpleMenu> menus = MenuBrowser.menuMap;
         if (menus.isEmpty()) {
-            sendMessage(sender, INFO, "No menus are currently registered.");
+            sendMessage(sender, INFO, "No templates are currently registered.");
             return true;
         }
 
@@ -232,13 +232,13 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
 
         sendComponent(sender, header);
 
-        sendComponent(sender, createHelpEntry("/menu open <player> <url> [args...]", "Open a menu"));
-        sendComponent(sender, createHelpEntry("/menu history <player>", "Show menu history"));
-        sendComponent(sender, createHelpEntry("/menu get <player>", "Get current menu"));
+        sendComponent(sender, createHelpEntry("/templates open <player> <url> [args...]", "Open a templates"));
+        sendComponent(sender, createHelpEntry("/templates history <player>", "Show templates history"));
+        sendComponent(sender, createHelpEntry("/templates get <player>", "Get current templates"));
 
-        if (sender.hasPermission("menu.admin")) {
-            sendComponent(sender, createHelpEntry("/menu reload", "Reload all menus"));
-            sendComponent(sender, createHelpEntry("/menu list", "List registered menus"));
+        if (sender.hasPermission("templates.admin")) {
+            sendComponent(sender, createHelpEntry("/templates reload", "Reload all templates"));
+            sendComponent(sender, createHelpEntry("/templates list", "List registered templates"));
         }
     }
 
@@ -284,7 +284,7 @@ public class MenuCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
             List<String> options = Arrays.asList("open", "history", "get");
-            if (sender.hasPermission("menu.admin")) {
+            if (sender.hasPermission("templates.admin")) {
                 options = Arrays.asList("open", "history", "get", "clear", "list");
             }
             return options.stream()

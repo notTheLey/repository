@@ -1,6 +1,6 @@
-name: menu
+name: templates
 version: '1.0.1-DEV.1'
-main: org.ley.menu.Main
+main: org.ley.menu.tools.Main
 api-version: '1.21'
 
 permissions:
@@ -9,4 +9,4 @@ permissions:
 
 commands:
   menu:
-    permission: "ley.debug.menu"
+    permission: "ley.debug.templates"

@@ -1,9 +1,7 @@
-package org.ley.menu.menu;
+package org.ley.menu.templates.simple;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.ley.menu.MenuBrowser;
@@ -11,7 +9,7 @@ import org.ley.menu.MenuBrowser;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class PermissionMenu extends Menu{
+public abstract class PermissionMenu extends SimpleMenu {
     private final List<String> permissions;
 
     public PermissionMenu(String url, int size, String permission, List<String> permissions) {

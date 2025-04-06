@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public final class EnhancedMenuManager implements Listener {
 
-    public EnhancedMenuManager () {
+    public EnhancedMenuManager() {
 
     }
 

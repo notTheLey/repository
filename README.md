@@ -1,6 +1,6 @@
 ## Overview
 
-This project is a part of the `notTheLey/repository` repository. It includes a library for managing menus. The library source is located in the `dev/org/ley/menu/source/menu` directory.
+This project is a part of the `leyCM/repository` repository. It includes a library for managing menus. The library source is located in the `dev/org/ley/menu/source/menu` directory.
 
 ## Features
 

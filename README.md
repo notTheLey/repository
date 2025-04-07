@@ -17,8 +17,8 @@ To use the menu library in your project, add the following dependency to your `p
 
 ```xml
 <repository>
-    <id>ley-repo</id>
-    <url>https://nottheley.github.io/repository/</url>
+    <id>ley.org</id>
+    <url>https://leycm.github.io/repository/</url>
 </repository>
 ```
 
@@ -46,7 +46,7 @@ For any questions or inquiries, please contact [your_email@example.com].
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/notTheLey/repository.git
+    git clone https://github.com/leyCM/repository.git
     cd repository
     ```
 

@@ -1,10 +1,12 @@
-package org.ley.menu.templates.simple;
+package org.ley.menu.templates.advanced;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.ley.menu.MenuBrowser;
+import org.ley.menu.templates.simple.SimpleMenu;
+import org.ley.menu.types.MenuComponent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,18 +43,21 @@ public abstract class PermissionMenu extends SimpleMenu {
         HashMap<String,String> args = new HashMap<>();
         boolean isPermitted = isPermitted(clicker);
 
-        onMenuClick(clicker, event, inventory, args, isPermitted);
-
         event.setCancelled(!isPermitted);
+        onMenuClick(clicker, event, inventory, args, isPermitted);
     }
 
     @Override
-    public void onMenuOpenTrigger(Player player) {
-        if (!MenuBrowser.getUrl(MenuBrowser.getPlayerMenu(player)).equalsIgnoreCase(super.getUrl())) return;
+    public MenuComponent onMenuOpenTrigger(Player player) {
+        if (!MenuBrowser.getUrl(MenuBrowser.getPlayerMenu(player)).equalsIgnoreCase(super.getUrl())) return null;
 
         HashMap<String, String> args = MenuBrowser.getArgs(MenuBrowser.getPlayerMenu(player));
+        MenuComponent menu = onMenuOpen(player, super.getInventory(), args, !isPermitted(player));
 
-        player.openInventory(onMenuOpen(player, super.getInventory(), args, !isPermitted(player)));
+        player.openInventory(menu.getInv());
+        player.getOpenInventory().setTitle(menu.getDisplayTitle());
+
+        return menu;
     }
 
     public boolean isPermitted(Player player) {
@@ -62,11 +67,14 @@ public abstract class PermissionMenu extends SimpleMenu {
     }
 
     @Override
-    public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args);
-    public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args, boolean isPermitted);
+    public void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args) {
+        onMenuClick(clicker, event, inventory, args, isPermitted(clicker));}
 
     @Override
-    public abstract Inventory onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args);
-    public abstract Inventory onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args, boolean isPermitted);
+    public MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args) {
+        return onMenuOpen(player, inventory, args, isPermitted(player));}
+
+    public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args, boolean isPermitted);
+    public abstract MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args, boolean isPermitted);
 
 }

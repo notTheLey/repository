@@ -46,15 +46,6 @@ public final class MenuBrowser implements Listener {
         pm.registerEvents(this, plugin);
     }
 
-    public MenuBrowser(JavaPlugin plugin, boolean ENHANCED_MENUS) {
-        MenuBrowser.plugin = Objects.requireNonNull(plugin, "Plugin cannot be null");
-        initDefaults();
-        pm = Bukkit.getPluginManager();
-        pm.registerEvents(this, plugin);
-        MenuBrowser.ENHANCED_MENUS = ENHANCED_MENUS;
-    }
-
-
     @EventHandler
     public static void onCloseInv(InventoryCloseEvent event){
         if (hasEmptyInventory((Player) event.getPlayer())) {

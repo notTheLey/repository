@@ -1,5 +1,6 @@
 package org.ley.menu.templates.simple;
 
+import com.sun.source.tree.BreakTree;
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,8 +36,11 @@ public abstract class SimpleMenu implements Listener {
     public void open(Player player, HashMap<String, String> args) {
         this.inventory.clear();
         this.args = args;
-
-        Bukkit.getScheduler().runTaskLater(MenuBrowser.plugin, () -> onMenuOpenTrigger(player), 5);
+        if (checkPlayerPlaytime(player)) {
+            onMenuOpenTrigger(player);
+        } else {
+            Bukkit.getScheduler().runTaskLater(MenuBrowser.plugin, () -> onMenuOpenTrigger(player), 7);
+        }
 
         MenuBrowser.registerOpenMenu(player, MenuBrowser.buildURL(url, args));
     }
@@ -61,4 +65,11 @@ public abstract class SimpleMenu implements Listener {
 
     public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args);
     public abstract Inventory onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args);
+
+    private boolean checkPlayerPlaytime(Player player) {
+        long currentTime = System.currentTimeMillis();
+        long lastJoinTime = player.getLastPlayed();
+        long timeSinceJoinTicks = ((currentTime - lastJoinTime) * 20) / 1000;
+        return timeSinceJoinTicks > 27;
+    }
 }

@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -47,11 +48,7 @@ public final class MenuBrowser implements Listener {
     }
 
     @EventHandler
-    public static void onCloseInv(InventoryCloseEvent event){
-        if (hasEmptyInventory((Player) event.getPlayer())) {
-            playerMap.remove(event.getPlayer().getUniqueId());
-        }
-    }
+    public static void onCloseInv(InventoryCloseEvent event){playerMap.remove(event.getPlayer().getUniqueId());}
 
     @EventHandler
     public static void onPlayerQuit(PlayerQuitEvent event){
@@ -262,13 +259,5 @@ public final class MenuBrowser implements Listener {
 
         Optional.ofNullable(menuMap.remove(url))
                 .ifPresent(HandlerList::unregisterAll);
-    }
-
-
-    private static boolean hasEmptyInventory(Player player) {
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null) {return false;}
-        }
-        return true;
     }
 }

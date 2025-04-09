@@ -1,6 +1,5 @@
 package org.ley.menu.templates.simple;
 
-import com.sun.source.tree.BreakTree;
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.ley.menu.MenuBrowser;
+import org.ley.menu.types.MenuComponent;
 
 import java.util.HashMap;
 
@@ -56,15 +56,20 @@ public abstract class SimpleMenu implements Listener {
         onMenuClick(clicker, event, inventory, args);
     }
 
-    public void onMenuOpenTrigger(Player player) {
-        if (!MenuBrowser.getUrl(MenuBrowser.getPlayerMenu(player)).equalsIgnoreCase(url)) return;
+    public MenuComponent onMenuOpenTrigger(Player player) {
+        if (!MenuBrowser.getUrl(MenuBrowser.getPlayerMenu(player)).equalsIgnoreCase(url)) return null;
 
         args = MenuBrowser.getArgs(MenuBrowser.getPlayerMenu(player));
-        player.openInventory(onMenuOpen(player, inventory, args));
+        MenuComponent menu = onMenuOpen(player, inventory, args);
+
+        player.openInventory(menu.getInv());
+        player.getOpenInventory().setTitle(menu.getDisplayTitle());
+
+        return menu;
     }
 
     public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args);
-    public abstract Inventory onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args);
+    public abstract MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args);
 
     private boolean checkPlayerPlaytime(Player player) {
         long currentTime = System.currentTimeMillis();

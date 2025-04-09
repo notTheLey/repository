@@ -25,7 +25,7 @@ public abstract class ItemListMenu extends SimpleMenu {
     public MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args) {
 
         String search = args.getOrDefault("search", "none");
-        
+
         ListMenuComponent menu = onMenuOpen(player, inventory, args, search);
         Inventory modInventory = menu.getInv();
 

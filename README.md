@@ -26,7 +26,12 @@ To use the menu library in your project, add the following dependency to your `p
 <dependency>
     <groupId>org.ley.menu</groupId>
     <artifactId>menu</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
+</dependency>
+<dependency>
+    <groupId>org.ley.time</groupId>
+    <artifactId>time</artifactId>
+    <version>1.0.1</version>
 </dependency>
 ```
 

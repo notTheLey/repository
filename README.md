@@ -9,7 +9,7 @@ This project is a part of the `leyCM/repository` repository. It includes a libra
 
 ## Requirements
 
-- **Java 17+**
+- **Java 21+**
 - **Maven 3.6+**
 
 ## Repository 

@@ -1,5 +1,5 @@
 name: templates
-version: '1.0.1-DEV.1'
+version: '1.0.2'
 main: org.ley.menu.tools.BukkitPluginMainClass
 api-version: '1.21'
 

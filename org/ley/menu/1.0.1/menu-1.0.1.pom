@@ -6,8 +6,7 @@
 
     <groupId>org.ley</groupId>
     <artifactId>menu</artifactId>
-    <version>1.0.2-DEV.1</version>
-    <version>1.0.2</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>menu</name>

@@ -21,7 +21,6 @@ public final class MenuBrowser implements Listener {
     public static final String DEFAULT_NO_MENU = "no.templates";
     public static final List<String> DEFAULT_NO_HISTORY = Collections.singletonList("no.history");
     public static final String EMPTY_STRING = "";
-    public static boolean ENHANCED_MENUS = false;
 
     public static PluginManager pm;
     public static JavaPlugin plugin;

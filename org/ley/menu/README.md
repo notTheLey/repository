@@ -47,7 +47,7 @@ MenuBrowser menuBrowser = new MenuBrowser(this);
 public  class FirstMenu implements SimpleMenu {
 
     public SimpleMenu() {
-        super("first.menu.exaple.id", 5 * 9) // or super("first.menu.exaple.id, InventoryType.CHEST)
+        super("first.menu.exaple.id", 5 * 9); // or super("first.menu.exaple.id, InventoryType.CHEST)
     }
 
     public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args){
@@ -55,7 +55,7 @@ public  class FirstMenu implements SimpleMenu {
     }
 
     public abstract MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args)
-         return new MenuComponent("coolname", inventory) // or new MenuComponent(holder, "coolname", inventory)
+         return new MenuComponent("coolname", inventory) // or new MenuComponent(holder, "coolname", inventory);
     }
 }
 ```
@@ -70,9 +70,15 @@ Be sure to only do this one time
 If you have do this one you can `open` it like this
 
 ```java
-   firstMenu.open(player, new HashMap<>()) 
+   firstMenu.open(player, new HashMap<>());
 
-   MenuBrowser.openForPlayer(player, "first.menu.exaple.id") // If you dont have the firstMenu in range 
+   MenuBrowser.openForPlayer(player, "first.menu.exaple.id"); // If you dont have the firstMenu in range 
 ```
 
-### 4. Use of Argsin Menus
+### 4. Use of Args in Menus
+To give args in a menu with `openForPlayer` you can use the MenuBrowser tool `buildURL()`
+
+```java
+   String url = MenuBrowser.buildURL("first.menu.exaple.id", new HashMap<>());
+   MenuBrowser.openForPlayer(player, url);
+```

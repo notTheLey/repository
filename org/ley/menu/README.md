@@ -64,21 +64,20 @@ public  class FirstMenu implements SimpleMenu {
 Be sure to only do this one time
 
 ```java
-   FirstMenu firstMenu = new FirstMenu();
+FirstMenu firstMenu = new FirstMenu();
 ```
 
 If you have do this one you can `open` it like this
 
 ```java
-   firstMenu.open(player, new HashMap<>());
-
-   MenuBrowser.openForPlayer(player, "first.menu.exaple.id"); // If you dont have the firstMenu in range 
+firstMenu.open(player, new HashMap<>());
+MenuBrowser.openForPlayer(player, "first.menu.exaple.id"); // If you dont have the firstMenu in range 
 ```
 
 ### 4. Use of Args in Menus
 To give args in a menu with `openForPlayer` you can use the MenuBrowser tool `buildURL()`
 
 ```java
-   String url = MenuBrowser.buildURL("first.menu.exaple.id", new HashMap<>());
-   MenuBrowser.openForPlayer(player, url);
+String url = MenuBrowser.buildURL("first.menu.exaple.id", new HashMap<>());
+MenuBrowser.openForPlayer(player, url);
 ```

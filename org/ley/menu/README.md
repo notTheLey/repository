@@ -44,5 +44,35 @@ MenuBrowser menuBrowser = new MenuBrowser(this);
 ### 2. Create Simple Menu 
 
 ```java
+public  class FirstMenu implements SimpleMenu {
 
+    public SimpleMenu() {
+        super("first.menu.exaple.id", 5 * 9) // or super("first.menu.exaple.id, InventoryType.CHEST)
+    }
+
+    public abstract void onMenuClick(Player clicker, InventoryClickEvent event, Inventory inventory, HashMap<String, String> args){
+
+    }
+
+    public abstract MenuComponent onMenuOpen(Player player, Inventory inventory, HashMap<String, String> args)
+         return new MenuComponent("coolname", inventory) // or new MenuComponent(holder, "coolname", inventory)
+    }
+}
 ```
+
+### 3. Create Initialize the Menu
+Be sure to only do this one time
+
+```java
+   FirstMenu firstMenu = new FirstMenu();
+```
+
+If you have do this one you can `open` it like this
+
+```java
+   firstMenu.open(player, new HashMap<>()) 
+
+   MenuBrowser.openForPlayer(player, "first.menu.exaple.id") // If you dont have the firstMenu in range 
+```
+
+### 4. Use of Argsin Menus
